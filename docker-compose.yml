@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: medical-ai-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: medical_ai
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./server/scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - medical-ai-network
+
+  # Node.js Backend API
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: medical-ai-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/medical_ai?authSource=admin
+      AI_SERVICE_URL: http://ai-service:8000
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+      - ai-service
+    networks:
+      - medical-ai-network
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  # Python AI Service
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: medical-ai-service
+    restart: unless-stopped
+    environment:
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      CHROMA_PERSIST_DIRECTORY: ./chroma_db
+      PUBMED_API_KEY: ""
+      OPENALEX_API_URL: https://api.openalex.org
+      CLINICAL_TRIALS_API_URL: https://clinicaltrials.gov/api/query
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    networks:
+      - medical-ai-network
+    volumes:
+      - ./ai-service:/app
+      - /app/venv
+      - chroma_data:/app/chroma_db
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: medical-ai-frontend
+    restart: unless-stopped
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - medical-ai-network
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: medical-ai-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - medical-ai-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  chroma_data:
+    driver: local
+
+networks:
+  medical-ai-network:
+    driver: bridge

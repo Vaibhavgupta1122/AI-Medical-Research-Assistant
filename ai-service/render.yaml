@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ai-medical-research-service
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: OLLAMA_BASE_URL
+        value: http://localhost:11434
+      - key: CHROMA_PERSIST_DIRECTORY
+        value: ./chroma_db
+      - key: PUBMED_API_KEY
+        sync: false
+      - key: OPENALEX_API_URL
+        value: https://api.openalex.org
+      - key: CLINICAL_TRIALS_API_URL
+        value: https://clinicaltrials.gov/api/query
+    healthCheckPath: /health
+    autoDeploy: true
