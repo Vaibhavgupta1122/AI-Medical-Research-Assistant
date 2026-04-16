@@ -47,7 +47,7 @@ npm run build
 7. Environment Variables:
    ```
    NODE_ENV=production
-   MONGODB_URI=mongodb+srv://vaibhavgupta1122:Vaibhav1212@medical-ai-clusters.710towk.mongodb.net/db
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/db
    AI_SERVICE_URL=https://your-ai-service.onrender.com
    JWT_SECRET=your-random-secret-key
    PORT=5000
