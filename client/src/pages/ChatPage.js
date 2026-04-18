@@ -8,15 +8,15 @@ import './ChatPage.css';
 
 function ChatPage() {
   const { user } = useAuth();
-  const { 
-    currentConversation, 
-    messages, 
-    loading, 
+  const {
+    currentConversation,
+    messages,
+    loading,
     fetchConversations,
     sendMessage,
-    createNewConversation 
+    createNewConversation
   } = useConversation();
-  
+
   const [showResearchPanel, setShowResearchPanel] = useState(false);
   const [context, setContext] = useState({});
   const messagesEndRef = useRef(null);
@@ -55,15 +55,15 @@ function ChatPage() {
     setContext(prev => ({ ...prev, ...newContext }));
   };
 
-  const currentResearchData = messages.length > 0 
-    ? messages[messages.length - 1]?.content?.research 
+  const currentResearchData = messages.length > 0
+    ? messages[messages.length - 1]?.content?.research
     : null;
 
   return (
     <div className="chat-page">
       <div className="chat-layout">
         {/* Sidebar */}
-        <Sidebar 
+        <Sidebar
           user={user}
           onNewConversation={handleNewConversation}
           currentConversationId={currentConversation?.id}
@@ -77,18 +77,14 @@ function ChatPage() {
                 AI Medical Research Assistant
               </h1>
               <div className="header-info">
-                {currentConversation ? (
+                {currentConversation && (
                   <span className="conversation-title">
                     {currentConversation.title}
-                  </span>
-                ) : (
-                  <span className="new-conversation-hint">
-                    Start a new conversation
                   </span>
                 )}
               </div>
             </div>
-            
+
             <div className="header-actions">
               <button
                 className={`research-toggle ${showResearchPanel ? 'active' : ''}`}
@@ -98,12 +94,12 @@ function ChatPage() {
                 <span className="research-icon">Research</span>
                 {currentResearchData && (
                   <span className="research-count">
-                    {currentResearchData.publications?.length || 0 + 
-                     currentResearchData.clinicalTrials?.length || 0} sources
+                    {currentResearchData.publications?.length || 0 +
+                      currentResearchData.clinicalTrials?.length || 0} sources
                   </span>
                 )}
               </button>
-              
+
               <div className="user-info">
                 <span className="user-name">{user?.name}</span>
                 <div className="user-avatar">

@@ -1,0 +1,73 @@
+.scroll-button {
+  position: fixed;
+  right: 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+.scroll-button:hover:not(.disabled) {
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.scroll-button:active:not(.disabled) {
+  transform: scale(0.95);
+}
+
+.scroll-button.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.scroll-button-up {
+  top: 80px;
+}
+
+.scroll-button-down {
+  bottom: 80px;
+}
+
+.scroll-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.scroll-button:hover .scroll-icon {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .scroll-button {
+    width: 35px;
+    height: 35px;
+    right: 15px;
+  }
+  
+  .scroll-button-up {
+    top: 60px;
+  }
+  
+  .scroll-button-down {
+    bottom: 60px;
+  }
+  
+  .scroll-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

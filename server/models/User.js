@@ -64,7 +64,6 @@ const userSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-userSchema.index({ email: 1 });
 userSchema.index({ 'profile.location.country': 1 });
 userSchema.index({ 'profile.medicalBackground.conditions': 1 });
 

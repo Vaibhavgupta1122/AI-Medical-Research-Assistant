@@ -21,6 +21,7 @@ function ChatBox({ messages, onSendMessage, loading, context, onContextUpdate })
     });
   };
 
+
   const renderMessage = (message, index) => {
     const isUser = message.type === 'user';
     const isTyping = message.isTyping;
@@ -47,7 +48,7 @@ function ChatBox({ messages, onSendMessage, loading, context, onContextUpdate })
               )}
             </div>
           )}
-          
+
           <div className="message-body">
             {isTyping ? (
               <div className="typing-message">
@@ -66,7 +67,7 @@ function ChatBox({ messages, onSendMessage, loading, context, onContextUpdate })
                 )}
               </div>
             )}
-            
+
             <div className="message-meta">
               <span className="message-time">
                 {formatTimestamp(message.timestamp)}
@@ -103,26 +104,26 @@ function ChatBox({ messages, onSendMessage, loading, context, onContextUpdate })
               </div>
               <h2>Welcome to AI Medical Research Assistant</h2>
               <p>
-                Ask me about medical conditions, treatments, clinical trials, or latest research findings. 
+                Ask me about medical conditions, treatments, clinical trials, or latest research findings.
                 I'll provide evidence-based information from peer-reviewed sources.
               </p>
-              
+
               <div className="suggested-queries">
                 <h3>Try asking:</h3>
                 <div className="query-suggestions">
-                  <button 
+                  <button
                     className="suggestion-btn"
                     onClick={() => handleSendMessage("What are the latest treatments for Parkinson disease?")}
                   >
                     What are the latest treatments for Parkinson disease?
                   </button>
-                  <button 
+                  <button
                     className="suggestion-btn"
                     onClick={() => handleSendMessage("Are there any clinical trials for Alzheimer's near me?")}
                   >
                     Are there any clinical trials for Alzheimer's near me?
                   </button>
-                  <button 
+                  <button
                     className="suggestion-btn"
                     onClick={() => handleSendMessage("What does the research say about diabetes management?")}
                   >
@@ -167,14 +168,14 @@ function ChatBox({ messages, onSendMessage, loading, context, onContextUpdate })
               <span className="context-icon">Context</span>
             </button>
           </div>
-          
+
           <MessageInput
             onSendMessage={handleSendMessage}
             disabled={loading}
             placeholder="Ask about medical research, treatments, or clinical trials..."
           />
         </div>
-        
+
         {showContextPanel && (
           <ContextPanel
             context={context}
